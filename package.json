@@ -1,0 +1,10 @@
+{
+  "name": "cs279server",
+  "version": "0.0.1",
+  "description": "cs279 experiment server for data collection",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.15.4",
+    "socket.io": "^2.0.3"
+  }
+}

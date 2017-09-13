@@ -1,0 +1,19 @@
+body {
+    font-family: Consolas, monaco, monospace;
+    font-size: 18px;
+    background-color: #F0FFF0;
+    padding: 0px;
+    margin: 0px;
+}
+
+#central {
+    position: absolute;
+    text-align: center;
+    top: 40%;
+    width: 100%;
+    background-color: #A0F0F0;
+}
+
+#mouseCoords {
+    text-align: center;
+}
