@@ -47,25 +47,24 @@ function Mainonload() {
         socket.emit("endSet", getMouseLocation(e, central));
     };
 
-    MouseTrack();
+    central.onmousemove = MouseTrack;
+    imgLeft.onmousemove = imgRight.onmousemove = startPos.onmousemove = MouseTrack;
 }
 
-function MouseTrack() {
+function MouseTrack(e) {
     var central = document.getElementById("central");
     var mouseCoords = document.getElementById("mouseCoords");
-
-    central.onmousemove = function (e) {
-        var pos = getMouseLocation(e, central);
-        mouseCoords.value = "[" + pos.x + ", " + parseInt(pos.y) + "]";
-        if (transmit) {
-            mouseCoords.style.background = "magenta";
-            socket.emit('mouseCoords', pos);
-        }
-        else {
-            mouseCoords.style.background = "white";
-        }
+    var pos = getMouseLocation(e, central);
+    mouseCoords.value = "[" + pos.x + ", " + parseInt(pos.y) + "]";
+    if (transmit) {
+        mouseCoords.style.background = "magenta";
+        socket.emit('mouseCoords', pos);
+    }
+    else {
+        mouseCoords.style.background = "white";
     }
 }
+
 
 function getMouseLocation(_event, _element) {
     var rect = _element.getBoundingClientRect();
