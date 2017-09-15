@@ -1,7 +1,3 @@
-/**
- * Created by spyridon on 9/12/17.
- */
-
 var express = require('express');
 var app = express();
 var http=require('http');

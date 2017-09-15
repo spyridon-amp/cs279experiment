@@ -9,4 +9,4 @@
     >npm install
 * now you are ready to start the server. in the same terminal type
     >node app.js
-* open a web browser and go to '127.0.0.1:1234
+* open a web browser and go to '127.0.0.1:9876
