@@ -6,7 +6,7 @@ body {
     margin: 0px;
 }
 
-#central {
+#intro {
     position: absolute;
     text-align: center;
     top: 40%;
@@ -14,6 +14,52 @@ body {
     background-color: #A0F0F0;
 }
 
+#topBar {
+    position: absolute;
+    text-align: center;
+    top: 0px;
+    width: 100%;
+    background-color: #A0F0F0;
+}
+
+#central {
+    position: absolute;
+    background-color: #ffefd5;
+    width: 100%;
+}
+
 #mouseCoords {
     text-align: center;
+}
+
+#userName {
+    text-align: center;
+}
+
+#nameError{
+    font-size: 10px;
+    text-align: center;
+    color: #FF0000;
+    display: none;
+}
+
+#leftImage {
+     position: absolute;
+     height: 100px;
+     width: 100px;
+     background-color: #e4ffcc;
+ }
+
+#rightImage {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    background-color: #e4ffcc;
+}
+
+#startPosition {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    background-color: #d3f5ff;
 }

@@ -4,7 +4,7 @@ var http=require('http');
 
 app.use(express.static(__dirname + '/public'));
 
-var server = app.listen(process.env.PORT || 1234, function() {
+var server = app.listen(process.env.PORT || 9876, function() {
     console.log('Listening on port %d', server.address().port);
 });
 
@@ -15,9 +15,16 @@ io.sockets.on('connection', function (socket) {
     socket.emit('hello', {});
 
     socket.on('mouseCoords', function(d) {
+        console.log(d);
         //store the coordinates to a database
-    })
+    });
+
+    socket.on("newSet", function(d) {
+        console.log(d);
+    });
+
+    socket.on("endSet", function(d) {
+        console.log(d);
+    });
 
 });
-
-//TODO: database. what structure? should have usernames with corresponding data
