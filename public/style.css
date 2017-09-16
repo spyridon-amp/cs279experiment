@@ -39,11 +39,11 @@ body {
 }
 
 @keyframes coordinatesBlink {
-    0%, 60%, 100% {
-        background-color: white;
-    }
-    70%, 90% {
+    0%, 20%, 100% {
         background-color: red;
+    }
+    30%, 90% {
+        background-color: white;
     }
 }
 
