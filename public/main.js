@@ -1,3 +1,4 @@
+//initialize socket.io and set listeners
 var socket = io('http://127.0.0.1:9876');
 
 socket.on('hello', function () {
@@ -37,14 +38,23 @@ function Mainonload() {
     startPos.style.top =  centralRect.top + centralRect.height - startPos.clientHeight - 50 + "px";
 
     startPos.onclick = function(e) {
+        if (transmit) return;
+
         ShowNextPair();
         transmit = true;
         socket.emit("newSet", getMouseLocation(e, central));
+        $("#mouseCoords").removeClass("mouseCoords");
+        $("#mouseCoords").addClass("mouseCoordsAnimated");
     };
 
     imgLeft.onclick = imgRight.onclick = function(e) {
+        if (!transmit) return;
+
         transmit = false;
-        socket.emit("endSet", getMouseLocation(e, central));
+        var pos = getMouseLocation(e, central);
+        socket.emit("selection", {id: id, username: userName, coordinates: pos, selection: this.id});
+        $("#mouseCoords").removeClass("mouseCoordsAnimated");
+        $("#mouseCoords").addClass("mouseCoords");
     };
 
     central.onmousemove = MouseTrack;
@@ -57,14 +67,9 @@ function MouseTrack(e) {
     var pos = getMouseLocation(e, central);
     mouseCoords.value = "[" + pos.x + ", " + parseInt(pos.y) + "]";
     if (transmit) {
-        mouseCoords.style.background = "magenta";
-        socket.emit('mouseCoords', pos);
-    }
-    else {
-        mouseCoords.style.background = "white";
+        socket.emit("tracking", {id: id, username: userName, coordinates: pos});
     }
 }
-
 
 function getMouseLocation(_event, _element) {
     var rect = _element.getBoundingClientRect();

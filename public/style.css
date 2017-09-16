@@ -28,8 +28,23 @@ body {
     width: 100%;
 }
 
-#mouseCoords {
+.mouseCoords {
     text-align: center;
+    background-color: white;
+}
+
+.mouseCoordsAnimated {
+    text-align: center;
+    animation: coordinatesBlink 1.2s linear infinite;
+}
+
+@keyframes coordinatesBlink {
+    0%, 60%, 100% {
+        background-color: white;
+    }
+    70%, 90% {
+        background-color: red;
+    }
 }
 
 #userName {
