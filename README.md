@@ -3,10 +3,13 @@
 
 ---
    
-* in order to run the server you need to install node.js
+* you will need to have node.js and mongodb installed in order to run the server locally
 
-* if you have node, open a terminal in the cs279 folder and run: 
+* if you have node, open a terminal, navigate to the cs279 folder and run: 
     >npm install
-* now you are ready to start the server. in the same terminal type
+* next start the MondoDB service in a new terminal window with:
+    >sudo mongod
+* now you are ready to start the server; in the terminal at the cs279 folder run:
     >node app.js
-* open a web browser and go to '127.0.0.1:9876
+* open a web browser and go to 
+    >localhost:9876
