@@ -112,3 +112,14 @@ function CheckName() {
 function ShowNextPair() {
 
 }
+
+function draw() {
+  var canvas = document.getElementById('canvas');
+  if (canvas.getContext) {
+    var ctx = canvas.getContext('2d');
+    //rect(width/2, 200, 150, 150);
+    ctx.fillRect(25, 200, 150, 150);
+    //rect(width/2, height/2, ratio*sqrt(area/ratio), sqrt(area/ratio) ); //w**2 * 2 = area => w = sqrt(area/2)
+    //ratio += 1.0/3.0;
+  }
+}
