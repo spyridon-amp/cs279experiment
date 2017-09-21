@@ -112,3 +112,53 @@ function CheckName() {
 function ShowNextPair() {
 
 }
+
+function draw() {
+  var canvas = document.getElementById('canvas');
+  if (canvas.getContext) {
+    var ctx = canvas.getContext('2d');
+    //picking ratio
+    var ratio = 1 + Math.floor(Math.random()*15) * 1/3;
+    if (Math.random() >= 0.5)  {
+      ratio = 1/ratio;
+    }
+    // selecting a random area factor
+  var area = [.65, .75, .85, 1.15, 1.25, 1.35];
+  var pickarea = function () {
+  var randomarea = area[Math.floor(Math.random()* 5)];
+  return randomarea;
+   };
+   //set width and height formulas
+   var w = ratio*sqrt((pickarea*22500)/ratio);                  
+   var h = sqrt((pickarea*22500)/ratio);
+    //draw rectangle
+    ctx.fillRect(500, 200, w, h);
+    //notes: rect(width/2, height/2, ratio*sqrt(area/ratio), sqrt(area/ratio) ); //w**2 * 2 = area => w = sqrt(area/2)
+ 
+  }
+}
+
+function drawtop() {
+    var canvas = document.getElementById('top');
+    if (canvas.getContext) {
+      var ctx = canvas.getContext('2d'); 
+      var X = canvas.width / 2;
+      var Y = canvas.height / 2;
+      var R = 45;
+      ctx.beginPath();
+      ctx.arc(X - 300, Y, R, 0, 2 * Math.PI, false);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#a9a9a9';
+      ctx.stroke();
+      ctx.font = "20px Arial";
+      ctx.fillText("Smaller",X - 333,Y + 5);
+      ctx.beginPath();
+      ctx.arc(X + 300, Y, R, 0, 2 * Math.PI, false);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#a9a9a9';
+      ctx.stroke();
+      ctx.font = "20px Arial";
+      ctx.fillText("Larger",X + 272,Y + 5);
+      ctx.fillRect(X-65,Y-70,150,150);
+    }
+}
