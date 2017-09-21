@@ -130,7 +130,7 @@ function draw() {
    };
    //set width and height formulas
    var w = ratio*sqrt((pickarea*22500)/ratio);                  
-   var h = sqrt((pickarea*22500)/ratio;
+   var h = sqrt((pickarea*22500)/ratio);
     //draw rectangle
     ctx.fillRect(500, 200, w, h);
     //notes: rect(width/2, height/2, ratio*sqrt(area/ratio), sqrt(area/ratio) ); //w**2 * 2 = area => w = sqrt(area/2)
