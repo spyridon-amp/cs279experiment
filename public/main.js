@@ -40,7 +40,7 @@ function Mainonload() {
     var target = document.getElementById("target");
     var targetRect = target.getBoundingClientRect();
     central.style.top = topBarRect.top + topBarRect.height + "px";
-    central.style.height = window.innerHeight - parseInt(central.style.top) + "px";
+    //central.style.height = window.innerHeight - parseInt(central.style.top) + "px";
 
     var centralRect = central.getBoundingClientRect();
     var imgLeft = document.getElementById("leftImage");
