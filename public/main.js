@@ -129,7 +129,7 @@ function draw() {
   return randomarea;
    };
    //set width and height formulas
-   var w = ratio*sqrt((pickarea*22500)/ratio;                  
+   var w = ratio*sqrt((pickarea*22500)/ratio);                  
    var h = sqrt((pickarea*22500)/ratio;
     //draw rectangle
     ctx.fillRect(500, 200, w, h);
