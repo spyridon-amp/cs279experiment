@@ -117,9 +117,23 @@ function draw() {
   var canvas = document.getElementById('canvas');
   if (canvas.getContext) {
     var ctx = canvas.getContext('2d');
-    //rect(width/2, 200, 150, 150);
-    ctx.fillRect(25, 200, 150, 150);
-    //rect(width/2, height/2, ratio*sqrt(area/ratio), sqrt(area/ratio) ); //w**2 * 2 = area => w = sqrt(area/2)
-    //ratio += 1.0/3.0;
+    //picking ratio
+    var ratio = 1 + Math.floor(Math.random()*15) * 1/3;
+    if (Math.random() >= 0.5)  {
+      ratio = 1/ratio;
+    }
+    // selecting a random area factor
+  var area = [.65, .75, .85, 1.15, 1.25, 1.35];
+  var pickarea = function () {
+  var randomarea = area_factor[Math.floor(Math.random()* 5)];
+  return randomarea;
+   };
+   //set width and height formulas
+   var w = ratio*sqrt((pickarea*22500)/ratio;                  
+   var h = sqrt((pickarea*22500)/ratio;
+    //draw rectangle
+    ctx.fillRect(500, 200, w, h);
+    //notes: rect(width/2, height/2, ratio*sqrt(area/ratio), sqrt(area/ratio) ); //w**2 * 2 = area => w = sqrt(area/2)
+ 
   }
 }
