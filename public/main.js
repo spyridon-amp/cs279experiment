@@ -50,13 +50,14 @@ function Mainonload() {
     imgLeft.style.left = centralRect.left + 50 + "px";
     imgRight.style.top = imgLeft.style.top;
     imgRight.style.left = centralRect.left + centralRect.width - 50 - imgRight.clientHeight + "px";
-    startPos.style.left = (centralRect.left + centralRect.width - startPos.clientWidth) * 0.5 + "px";
-    startPos.style.top = centralRect.top + centralRect.height - startPos.clientHeight - 50 + "px";
 
     displayBar.style.top = centralRect.top + 50 + "px";
-    displayBar.style.left = centralRect.left + centralRect.width/2 - displayRect.width/2 + "px";
+    displayBar.style.left = centralRect.left + centralRect.width*0.5 - displayRect.width*0.5 + "px";
     target.style.top = centralRect.top + 800 - targetRect.height - 50 + "px";
-    target.style.left = centralRect.left + centralRect.width/2 - targetRect.width/2 + "px";
+    target.style.left = centralRect.left + centralRect.width*0.5 - targetRect.width*0.5 + "px";
+    startPos.style.left = (centralRect.left + centralRect.width - startPos.clientWidth) * 0.5 + "px";
+    startPos.style.top = centralRect.top + centralRect.height - startPos.clientHeight - 50 - targetRect.height*0.5 + "px";
+    target.style.display = "none";
 
     startPos.onclick = function (e) {
         if (recording) return;
@@ -76,8 +77,7 @@ function Mainonload() {
         if (!recording) return;
 
         recording = false;
-        //target.style.display = "none";
-        var pos = getMouseLocation(e, central);
+        target.style.display = "none";
         var data = {id: id, username: userName, selection: this.id, coordinates: coordsTrack, area: area, ratio: ratio};
         $.ajax({
                 url: "/data",
