@@ -86,3 +86,7 @@ canvas {
     margin-right: auto;
     display: block;
 }
+
+#displayBar {
+    position: absolute;
+}
