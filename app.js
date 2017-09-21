@@ -1,9 +1,13 @@
 var express = require('express');
 var app = express();
 var http=require('http');
+var bodyParser = require('body-parser');
 
 //serve client webpage
 app.use(express.static(__dirname + '/public'));
+
+//enable parsing of received messages
+app.use(bodyParser.json()); // for parsing application/json
 
 var server = app.listen(process.env.PORT || 9876, function() {
     console.log('Listening on port %d', server.address().port);
@@ -30,30 +34,16 @@ MongoClient.connect(url, function(err, db) {
     });
 });
 
-//socket.io connection for data collection
-var io = require('socket.io').listen(server);
+app.post('/user', function(req, res) {
+    userName = req.body.user;
+    userCollection.insertOne(req.body, function() {
+        res.contentType('json');
+        res.send(JSON.stringify({id: req.body._id}));
+    })
+});
 
-io.sockets.on('connection', function (socket) {
-    console.log("CONNECTION");
-    socket.emit('hello', {});
-
-    socket.on('userName', function(d) {
-       userCollection.insertOne(d, function() {
-           socket.emit('uniqueId', {id: d._id});
-       });
-    });
-
-    socket.on('mouseCoords', function(d) {
-        //console.log(d);
-        //store the coordinates to a database
-    });
-
-    socket.on('newSet', function(d) {
-        console.log(d);
-    });
-
-    socket.on('selection', function(d) {
-        console.log(d);
-    });
-
+app.post('/data', function(req, res) {
+    var data = req.body;
+    console.log(data);
+    dataCollection.insertOne(data);
 });

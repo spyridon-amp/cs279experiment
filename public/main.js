@@ -1,23 +1,34 @@
-//initialize socket.io and set listeners
-var socket = io('http://127.0.0.1:9876');
-
-socket.on('hello', function () {
-    console.log('got hello!');
-});
-
-socket.on('uniqueId', function(d) {
-   id = d.id;
-});
-
 var userName;
 var id = "none";
-var transmit = false;
+var recording = false;
+var coordsTrack = [];
 
 function Login() {
     userName = document.getElementById("userName").value;
-    socket.emit("userName", {user: userName});
+    $.ajax({url: "/user",
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({user: userName}),
+            contentType: "application/json",
+            cache: false,
+            timeout: 5000,
+            complete: function () {
+                //called when complete
+                console.log('process complete');
+            },
 
-    $("#content").load("mainTask.html #content", Mainonload);
+            success: function (data) {
+                console.log(JSON.stringify(data));
+                console.log('process sucess');
+                id = data.id;
+                $("#content").load("mainTask.html #content", Mainonload);
+            },
+
+            error: function () {
+                console.log('process error');
+            }
+        }
+    );
 }
 
 function Mainonload() {
@@ -38,21 +49,45 @@ function Mainonload() {
     startPos.style.top =  centralRect.top + centralRect.height - startPos.clientHeight - 50 + "px";
 
     startPos.onclick = function(e) {
-        if (transmit) return;
+        if (recording) return;
 
         ShowNextPair();
-        transmit = true;
-        socket.emit("newSet", getMouseLocation(e, central));
+        recording = true;
+        coordsTrack = [];
+        coordsTrack.push(getMouseLocation(e, central));
         $("#mouseCoords").removeClass("mouseCoords");
         $("#mouseCoords").addClass("mouseCoordsAnimated");
     };
 
     imgLeft.onclick = imgRight.onclick = function(e) {
-        if (!transmit) return;
+        if (!recording) return;
 
-        transmit = false;
+        recording = false;
         var pos = getMouseLocation(e, central);
-        socket.emit("selection", {id: id, username: userName, coordinates: pos, selection: this.id});
+        //TODO: ADD RATIO AND AREA TO data
+        var data = {id: id, username: userName, selection: this.id, coordinates: coordsTrack};
+        $.ajax({url: "/data",
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                cache: false,
+                timeout: 5000,
+                complete: function () {
+                    //called when complete
+                    console.log('process complete');
+                },
+
+                success: function (data) {
+                    console.log(JSON.stringify(data));
+                    console.log('process sucess');
+                },
+
+                error: function () {
+                    console.log('process error');
+                }
+            }
+        );
         $("#mouseCoords").removeClass("mouseCoordsAnimated");
         $("#mouseCoords").addClass("mouseCoords");
     };
@@ -66,14 +101,14 @@ function MouseTrack(e) {
     var mouseCoords = document.getElementById("mouseCoords");
     var pos = getMouseLocation(e, central);
     mouseCoords.value = "[" + pos.x + ", " + parseInt(pos.y) + "]";
-    if (transmit) {
-        socket.emit("tracking", {id: id, username: userName, coordinates: pos});
+    if (recording) {
+        coordsTrack.push(getMouseLocation(e, central));
     }
 }
 
 function getMouseLocation(_event, _element) {
     var rect = _element.getBoundingClientRect();
-    return {x: _event.clientX - rect.left, y: _event.clientY - rect.top};
+    return {x: _event.clientX - rect.left, y: _event.clientY - rect.top, t: Date.now()};
 }
 
 function getRandomColor() {
