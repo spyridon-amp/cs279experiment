@@ -7,7 +7,7 @@
     <script type="text/javascript" src="socket.io.js"></script>
     <link rel="stylesheet" href="style.css" type="text/css">
 </head>
-<body onload=Main() onload="draw();">
+<body onload=Main() onload=draw() onload=drawtop()>
 <script type="text/javascript" src="main.js"></script>
 <div id="content">
     <div id="topBar">
@@ -25,6 +25,7 @@
     <div id="leftImage"></div>
     <div id="rightImage"></div>
     <div id="startPosition"></div>
+    <canvas id="top" width="800" height="200"></canvas>
     <canvas id="canvas" width= 380 height= 380 ></canvas>
 </div>
 

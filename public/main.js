@@ -137,3 +137,28 @@ function draw() {
  
   }
 }
+
+function drawtop() {
+    var canvas = document.getElementById('top');
+    if (canvas.getContext) {
+      var ctx = canvas.getContext('2d'); 
+      var X = canvas.width / 2;
+      var Y = canvas.height / 2;
+      var R = 45;
+      ctx.beginPath();
+      ctx.arc(X - 300, Y, R, 0, 2 * Math.PI, false);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#a9a9a9';
+      ctx.stroke();
+      ctx.font = "20px Arial";
+      ctx.fillText("Smaller",X - 333,Y + 5);
+      ctx.beginPath();
+      ctx.arc(X + 300, Y, R, 0, 2 * Math.PI, false);
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#a9a9a9';
+      ctx.stroke();
+      ctx.font = "20px Arial";
+      ctx.fillText("Larger",X + 272,Y + 5);
+      ctx.fillRect(X-65,Y-70,150,150);
+    }
+}
