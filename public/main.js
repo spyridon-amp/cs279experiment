@@ -33,13 +33,12 @@ function Login() {
 }
 
 function Mainonload() {
-    draw();
-    drawtop();
-
     var central = document.getElementById("central");
     var topBarRect = document.getElementById("topBar").getBoundingClientRect();
     var displayBar = document.getElementById("displayBar");
     var displayRect = displayBar.getBoundingClientRect();
+    var target = document.getElementById("target");
+    var targetRect = target.getBoundingClientRect();
     central.style.top = topBarRect.top + topBarRect.height + "px";
     central.style.height = window.innerHeight - parseInt(central.style.top) + "px";
 
@@ -55,12 +54,18 @@ function Mainonload() {
     startPos.style.top = centralRect.top + centralRect.height - startPos.clientHeight - 50 + "px";
 
     displayBar.style.top = centralRect.top + 50 + "px";
-    displayBar.style.left = centralRect.left + centralRect.width/2 - displayRect.width/2;
+    displayBar.style.left = centralRect.left + centralRect.width/2 - displayRect.width/2 + "px";
+    target.style.top = centralRect.top + 800 - targetRect.height - 50 + "px";
+    target.style.left = centralRect.left + centralRect.width/2 - targetRect.width/2 + "px";
 
     startPos.onclick = function (e) {
         if (recording) return;
 
         recording = true;
+        var target = document.getElementById("target");
+        var targetRect = target.getBoundingClientRect();
+        target.style.display = "block";
+        draw();
         coordsTrack = [];
         coordsTrack.push(getMouseLocation(e, central));
         $("#mouseCoords").removeClass("mouseCoords");
@@ -71,9 +76,9 @@ function Mainonload() {
         if (!recording) return;
 
         recording = false;
+        //target.style.display = "none";
         var pos = getMouseLocation(e, central);
-        //TODO: ADD RATIO AND AREA TO data
-        var data = {id: id, username: userName, selection: this.id, coordinates: coordsTrack};
+        var data = {id: id, username: userName, selection: this.id, coordinates: coordsTrack, area: area, ratio: ratio};
         $.ajax({
                 url: "/data",
                 type: "POST",
@@ -103,6 +108,9 @@ function Mainonload() {
 
     central.onmousemove = MouseTrack;
     imgLeft.onmousemove = imgRight.onmousemove = startPos.onmousemove = MouseTrack;
+
+    draw();
+    drawtop();
 }
 
 function MouseTrack(e) {
@@ -153,36 +161,39 @@ function CheckName() {
     }
 }
 
+var area;
+var ratio;
 function draw() {
-    var canvas = document.getElementById('canvas');
-    if (canvas.getContext) {
-        var ctx = canvas.getContext('2d');
+    var target = document.getElementById('target');
+    var tRect = target.getBoundingClientRect();
+    if (target.getContext) {
+        console.log("drawing target");
+        var ctx = target.getContext('2d');
+        ctx.clearRect(0, 0, target.width, target.height);
         //picking ratio
-        var ratio = 1 + Math.floor(Math.random() * 15) / 3;
+        ratio = 1 + Math.floor(Math.random() * 15) / 3;
         if (Math.random() >= 0.5) {
             ratio = 1 / ratio;
         }
         // selecting a random area factor
-        var area = [.65, .75, .85, 1.15, 1.25, 1.35];
-        var pickarea = function () {
-            return area[Math.floor(Math.random() * 5)];
-        };
+        area = [.65, .75, .85, 1.15, 1.25, 1.35];
+        var pickarea = area[Math.floor(Math.random() * 5)];
         //set width and height formulas
         var w = ratio * Math.sqrt((pickarea * 22500) / ratio);
         var h = Math.sqrt((pickarea * 22500) / ratio);
         //draw rectangle
-        ctx.fillRect(500, 200, w, h);
+        ctx.fillRect(tRect.width/2 - w/2, tRect.height/2 - h/2, w, h);
         //notes: rect(width/2, height/2, ratio*sqrt(area/ratio), sqrt(area/ratio) ); //w**2 * 2 = area => w = sqrt(area/2)
 
     }
 }
 
 function drawtop() {
-    var canvas = document.getElementById('displayBar');
-    if (canvas.getContext) {
-        var ctx = canvas.getContext('2d');
-        var X = canvas.width / 2;
-        var Y = canvas.height / 2;
+    var display = document.getElementById('displayBar');
+    if (display.getContext) {
+        var ctx = display.getContext('2d');
+        var X = display.width / 2;
+        var Y = display.height / 2;
         var R = 45;
         ctx.beginPath();
         ctx.arc(X - 300, Y, R, 0, 2 * Math.PI, false);

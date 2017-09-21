@@ -90,3 +90,8 @@ canvas {
 #displayBar {
     position: absolute;
 }
+
+#target {
+    position: absolute;
+    /*display: none;*/
+}
