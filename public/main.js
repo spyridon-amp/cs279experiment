@@ -47,16 +47,16 @@ function Mainonload() {
     var imgRight = document.getElementById("rightImage");
     var startPos = document.getElementById("startPosition");
     imgLeft.style.top = centralRect.top + 50 + "px";
-    imgLeft.style.left = centralRect.left + 50 + "px";
+    imgLeft.style.left = centralRect.left + centralRect.width*0.5 - 500 + "px";
     imgRight.style.top = imgLeft.style.top;
-    imgRight.style.left = centralRect.left + centralRect.width - 50 - imgRight.clientHeight + "px";
+    imgRight.style.left = centralRect.left + centralRect.width*0.5 + 500 - imgRight.clientWidth + "px";
 
     displayBar.style.top = centralRect.top + 50 + "px";
     displayBar.style.left = centralRect.left + centralRect.width*0.5 - displayRect.width*0.5 + "px";
-    target.style.top = centralRect.top + 800 - targetRect.height - 50 + "px";
+    target.style.top = centralRect.top + 600 - targetRect.height*0.5 + "px";
     target.style.left = centralRect.left + centralRect.width*0.5 - targetRect.width*0.5 + "px";
     startPos.style.left = (centralRect.left + centralRect.width - startPos.clientWidth) * 0.5 + "px";
-    startPos.style.top = centralRect.top + centralRect.height - startPos.clientHeight - 50 - targetRect.height*0.5 + "px";
+    startPos.style.top = centralRect.top + 600 - startPos.clientHeight*0.5 + "px";
     target.style.display = "none";
 
     startPos.onclick = function (e) {
@@ -209,6 +209,6 @@ function drawtop() {
         ctx.stroke();
         ctx.font = "20px Arial";
         ctx.fillText("Larger", X + 272, Y + 5);
-        ctx.fillRect(X - 65, Y - 70, 150, 150);
+        ctx.fillRect(X - 75, Y - 75, 150, 150);
     }
 }

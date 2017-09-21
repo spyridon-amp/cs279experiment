@@ -20,10 +20,11 @@ body {
     top: 0px;
     width: 100%;
     background-color: #A0F0F0;
+    display: block;
 }
 
 #central {
-    position: absolute;
+    position: relative;
     background-color: #ffefd5;
     width: 100%;
 }
@@ -51,7 +52,7 @@ body {
     text-align: center;
 }
 
-#nameError{
+#nameError {
     font-size: 10px;
     text-align: center;
     color: #FF0000;
@@ -59,17 +60,29 @@ body {
 }
 
 #leftImage {
-     position: absolute;
-     height: 100px;
-     width: 100px;
-     background-color: #e4ffcc;
- }
+    position: absolute;
+    height: 90px;
+    width: 90px;
+    border-radius: 50%;
+    border: 2px solid darkgrey;
+    background-color: transparent;/*#e4ffcc;*/
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 90px;
+}
 
 #rightImage {
     position: absolute;
-    height: 100px;
-    width: 100px;
-    background-color: #e4ffcc;
+    height: 90px;
+    width: 90px;
+    border-radius: 50%;
+    border: 2px solid darkgrey;
+    background-color: transparent;/*#e4ffcc;*/
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 90px;
 }
 
 #startPosition {
