@@ -31,6 +31,7 @@ function Login() {
             }
         }
     );
+    Practiceonload();
 }
 
 function Mainonload() {
