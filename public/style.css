@@ -58,7 +58,7 @@ ul {
     top: 0px;
     width: 100%;
     background-color: #A0F0F0;
-    display: none;
+    display: block; /********* display for debugging only *********/
 }
 
 #central {

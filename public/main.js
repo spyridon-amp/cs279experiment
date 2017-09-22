@@ -2,6 +2,7 @@ var userName;
 var id = "none";
 var recording = false;
 var coordsTrack = [];
+var practiceRun = true;
 
 function Login() {
     userName = document.getElementById("userName").value;
@@ -30,6 +31,7 @@ function Login() {
             }
         }
     );
+    Practiceonload();
 }
 
 function Mainonload() {
@@ -53,62 +55,82 @@ function Mainonload() {
 
     displayBar.style.top = centralRect.top + 50 + "px";
     displayBar.style.left = centralRect.left + centralRect.width*0.5 - displayRect.width*0.5 + "px";
-    target.style.top = centralRect.top + 600 - targetRect.height*0.5 + "px";
-    target.style.left = centralRect.left + centralRect.width*0.5 - targetRect.width*0.5 + "px";
+    target.style.top = centralRect.top + 510 - target.clientHeight*0.5 + "px";
+    target.style.left = (centralRect.left + centralRect.width - target.clientWidth) * 0.5 + "px";
     startPos.style.left = (centralRect.left + centralRect.width - startPos.clientWidth) * 0.5 + "px";
-    startPos.style.top = centralRect.top + 600 - startPos.clientHeight*0.5 + "px";
+    startPos.style.top = centralRect.top + 510 - startPos.clientHeight*0.5 + "px";
     target.style.display = "none";
 
     startPos.onclick = function (e) {
         if (recording) return;
 
-        recording = true;
+        //draw rect to be classified
         var target = document.getElementById("target");
-        var targetRect = target.getBoundingClientRect();
         target.style.display = "block";
         draw();
-        coordsTrack = [];
-        coordsTrack.push(getMouseLocation(e, central));
-        $("#mouseCoords").removeClass("mouseCoords");
-        $("#mouseCoords").addClass("mouseCoordsAnimated");
+
+        //start recording mouse
+        if (!practiceRun) {
+            recording = true;
+            coordsTrack = [];
+            coordsTrack.push(getMouseLocation(e, central));
+            //turn on blink on debugging
+            $("#mouseCoords").removeClass("mouseCoords");
+            $("#mouseCoords").addClass("mouseCoordsAnimated");
+        }
     };
 
     imgLeft.onclick = imgRight.onclick = function (e) {
-        if (!recording) return;
-
-        recording = false;
         target.style.display = "none";
-        var data = {id: id, username: userName, selection: this.id, coordinates: coordsTrack, area: area, ratio: ratio};
-        $.ajax({
-                url: "/data",
-                type: "POST",
-                dataType: "json",
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                cache: false,
-                timeout: 5000,
-                complete: function () {
-                    //called when complete
-                    console.log('process complete');
-                },
 
-                success: function (data) {
-                    console.log(JSON.stringify(data));
-                    console.log('process sucess');
-                },
+        //stop recording and send data to server
+        if (recording) {
+            recording = false;
+            var data = {
+                id: id,
+                username: userName,
+                selection: this.id,
+                coordinates: coordsTrack,
+                area: area,
+                ratio: ratio
+            };
+            $.ajax({
+                    url: "/data",
+                    type: "POST",
+                    dataType: "json",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    cache: false,
+                    timeout: 5000,
+                    complete: function () {
+                        //called when complete
+                        console.log('process complete');
+                    },
 
-                error: function () {
-                    console.log('process error');
+                    success: function (data) {
+                        console.log(JSON.stringify(data));
+                        console.log('process sucess');
+                    },
+
+                    error: function () {
+                        console.log('process error');
+                    }
                 }
-            }
-        );
-        $("#mouseCoords").removeClass("mouseCoordsAnimated");
-        $("#mouseCoords").addClass("mouseCoords");
+            );
+            //turn off blink on debugging
+            $("#mouseCoords").removeClass("mouseCoordsAnimated");
+            $("#mouseCoords").addClass("mouseCoords");
+        }
     };
 
     central.onmousemove = MouseTrack;
     imgLeft.onmousemove = imgRight.onmousemove = startPos.onmousemove = MouseTrack;
 
+    draw();
+    drawtop();
+}
+
+function Practiceonload(){
     draw();
     drawtop();
 }
@@ -165,7 +187,6 @@ var area;
 var ratio;
 function draw() {
     var target = document.getElementById('target');
-    var tRect = target.getBoundingClientRect();
     if (target.getContext) {
         console.log("drawing target");
         var ctx = target.getContext('2d');
@@ -182,9 +203,8 @@ function draw() {
         var w = ratio * Math.sqrt((pickarea * 22500) / ratio);
         var h = Math.sqrt((pickarea * 22500) / ratio);
         //draw rectangle
-        ctx.fillRect(tRect.width/2 - w/2, tRect.height/2 - h/2, w, h);
+        ctx.fillRect((target.clientWidth - w)*0.5, (target.clientHeight - h)*0.5, w, h);
         //notes: rect(width/2, height/2, ratio*sqrt(area/ratio), sqrt(area/ratio) ); //w**2 * 2 = area => w = sqrt(area/2)
-
     }
 }
 
