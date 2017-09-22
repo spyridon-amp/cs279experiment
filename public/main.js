@@ -129,6 +129,11 @@ function Mainonload() {
     drawtop();
 }
 
+function Practiceonload(){
+    draw();
+    drawtop();
+}
+
 function MouseTrack(e) {
     var central = document.getElementById("central");
     var mouseCoords = document.getElementById("mouseCoords");
