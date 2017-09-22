@@ -10,12 +10,35 @@
 <body onload=CheckName()>
 <script type="text/javascript" src="main.js"></script>
 <div id="content">
+    <div id="instructions">
+        <h1>Shape Comparisons</h1>
+        <br/>
+        <p>Hello 😀</p>
+
+        <p>Welcome to Shape Comparisons. Thank you for joining us today.</p>
+
+        <p>For this activity you will be asked to compare the size of two black boxes - a static one at the top of the screen and a changing one at the bottom of the screen. Here's how this works:</p>
+        <ul>
+            <li>Click the small black circle at the botton of the screen to start</li>
+            <li>If the box at the bottom of the screen is larger than the one at the top, then click the "larger" button, and if it is smaller, click the "smaller" button</li>
+            <li>To get your next box, click the small black circle that appears at the bottom of the screen</li>
+            <li>Keep going with your comparisons until the activity concludes</li>
+        </ul>
+          <b>Please do this as quickly and accurately as possible. </b>  </p> 
+
+        <p>We will start you off with a practice round where you can try this out. The entire activity will take about 15 minutes.</p>
+        <br/>
+    </div>
     <div id="intro">
+        <br/>
+        <p>Please enter your initials and hit "start practice round" to begin!</p>
         <br/>
         <span id="nameError">initials must be two (2) characters</span>
         <input type="text" id="userName" placeholder="Initials">
         <br/>
-        <button id="uNButton" disabled onclick=Login()>start</button>
+        <br/>
+        <button id="uNButton" class="buttons" disabled onclick=Login()>start practice round</button>
+        <br/>
         <br/>
     </div>
 </div>
