@@ -113,6 +113,10 @@ function Mainonload() {
     imgLeft.onclick = imgRight.onclick = function (e) {
         target.style.display = "none";
 
+        if (!practiceRun && ((pickarea > 1 && this.id === "rightImage") || (pickarea < 1 && this.id === "leftImage"))) {
+            score ++;
+        }
+
         if (practiceRun && practiceIt >= 5) {
             practiceRun = false;
             $("#content").load("waiting.html #content");
@@ -121,10 +125,6 @@ function Mainonload() {
             $("#content").load("end.html #content", function() {
                 document.getElementById("score").innerHTML = score + "/" + totalRounds;
             });
-        }
-
-        if (!practiceRun && ((pickarea > 1 && this.id === "rightImage") || (pickarea < 1 && this.id === "leftImage"))) {
-            score ++;
         }
 
         //stop recording and send data to server
