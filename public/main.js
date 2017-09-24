@@ -3,6 +3,12 @@ var id = "none";
 var recording = false;
 var coordsTrack = [];
 var practiceRun = true;
+var practiceIt = 0;
+var currentRound = 0;
+var totalRounds = 5;
+var score = 0;
+var pickarea;
+var ratio;
 
 function Login() {
     userName = document.getElementById("userName").value;
@@ -23,7 +29,7 @@ function Login() {
                 console.log(JSON.stringify(data));
                 console.log('process sucess');
                 id = data.id;
-                $("#content").load("mainTask.html #content", Mainonload);
+                loadMain();
             },
 
             error: function () {
@@ -31,38 +37,62 @@ function Login() {
             }
         }
     );
-    Practiceonload();
+}
+
+var alertrunning = false;
+function checkWindowSize() {
+    setTimeout(function() {
+        if (!alertrunning && (window.innerWidth < 1024 || window.innerHeight < 720)) {
+            alertrunning = true;
+            alert("You need to resize the browser window to a minimum width of 1024px " +
+                "and a minimum height of 720px. " +
+                "Resize or use fullscreen mode and click ok to continue.");
+            setTimeout(checkWindowSize(), 1000);
+        }
+        else {
+            alertrunning = false;
+        }
+    }, 1000);
+}
+
+$(window).on('resize', function () {
+        checkWindowSize();
+});
+
+function loadMain() {
+    $("#content").load("mainTask.html #content", Mainonload);
 }
 
 function Mainonload() {
     var central = document.getElementById("central");
-    var topBarRect = document.getElementById("topBar").getBoundingClientRect();
     var displayBar = document.getElementById("displayBar");
     var displayRect = displayBar.getBoundingClientRect();
     var target = document.getElementById("target");
-    var targetRect = target.getBoundingClientRect();
-    central.style.top = topBarRect.top + topBarRect.height + "px";
-    //central.style.height = window.innerHeight - parseInt(central.style.top) + "px";
 
     var centralRect = central.getBoundingClientRect();
     var imgLeft = document.getElementById("leftImage");
     var imgRight = document.getElementById("rightImage");
     var startPos = document.getElementById("startPosition");
-    imgLeft.style.top = centralRect.top + 50 + "px";
-    imgLeft.style.left = centralRect.left + centralRect.width*0.5 - 500 + "px";
+    imgLeft.style.top = 50 + "px";
+    imgLeft.style.left = centralRect.width*0.5 - 500 + "px";
     imgRight.style.top = imgLeft.style.top;
-    imgRight.style.left = centralRect.left + centralRect.width*0.5 + 500 - imgRight.clientWidth + "px";
+    imgRight.style.left = centralRect.width*0.5 + 500 - imgRight.clientWidth + "px";
 
-    displayBar.style.top = centralRect.top + 50 + "px";
-    displayBar.style.left = centralRect.left + centralRect.width*0.5 - displayRect.width*0.5 + "px";
-    target.style.top = centralRect.top + 510 - target.clientHeight*0.5 + "px";
-    target.style.left = (centralRect.left + centralRect.width - target.clientWidth) * 0.5 + "px";
-    startPos.style.left = (centralRect.left + centralRect.width - startPos.clientWidth) * 0.5 + "px";
-    startPos.style.top = centralRect.top + 510 - startPos.clientHeight*0.5 + "px";
+    displayBar.style.top = 50 + "px";
+    displayBar.style.left = centralRect.width*0.5 - displayRect.width*0.5 + "px";
+    target.style.top = 510 - target.clientHeight*0.5 + "px";
+    target.style.left = (centralRect.width - target.clientWidth) * 0.5 + "px";
+    startPos.style.left = (centralRect.width - startPos.clientWidth) * 0.5 + "px";
+    startPos.style.top = 510 - startPos.clientHeight*0.5 + "px";
     target.style.display = "none";
 
     startPos.onclick = function (e) {
+        //inactive while recording
         if (recording) return;
+
+        //count number of  rounds
+        if (practiceRun) practiceIt ++;
+        else currentRound ++;
 
         //draw rect to be classified
         var target = document.getElementById("target");
@@ -83,6 +113,20 @@ function Mainonload() {
     imgLeft.onclick = imgRight.onclick = function (e) {
         target.style.display = "none";
 
+        if (practiceRun && practiceIt >= 5) {
+            practiceRun = false;
+            $("#content").load("waiting.html #content");
+        }
+        if (currentRound >= totalRounds) {
+            $("#content").load("end.html #content", function() {
+                document.getElementById("score").innerHTML = score + "/" + totalRounds;
+            });
+        }
+
+        if (!practiceRun && ((pickarea > 1 && this.id === "rightImage") || (pickarea < 1 && this.id === "leftImage"))) {
+            score ++;
+        }
+
         //stop recording and send data to server
         if (recording) {
             recording = false;
@@ -91,7 +135,7 @@ function Mainonload() {
                 username: userName,
                 selection: this.id,
                 coordinates: coordsTrack,
-                area: area,
+                area: pickarea,
                 ratio: ratio
             };
             $.ajax({
@@ -128,11 +172,8 @@ function Mainonload() {
 
     draw();
     drawtop();
-}
 
-function Practiceonload(){
-    draw();
-    drawtop();
+    checkWindowSize();
 }
 
 function MouseTrack(e) {
@@ -150,32 +191,28 @@ function getMouseLocation(_event, _element) {
     return {x: _event.clientX - rect.left, y: _event.clientY - rect.top, t: Date.now()};
 }
 
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
 function CheckName() {
     var name = document.getElementById("userName");
     name.focus();
     var button = document.getElementById("uNButton");
     var errmessage = document.getElementById("nameError");
+    var noerr = document.getElementById("noError");
     name.onkeyup = function (e) {
         var s = name.value.length;
         if (s === 1) {
             errmessage.style.display = "block";
+            noerr.style.display = "none";
             button.disabled = true;
         }
         else {
             if (s > 2) {
                 name.value = name.value.substring(0, 2);
             }
+            if (s !== 0) {
+                button.disabled = false;
+            }
             errmessage.style.display = "none";
-            button.disabled = false;
+            noerr.style.display = "block";
         }
         if (e.key === "Enter" && !button.disabled) {
             Login();
@@ -183,8 +220,6 @@ function CheckName() {
     }
 }
 
-var area;
-var ratio;
 function draw() {
     var target = document.getElementById('target');
     if (target.getContext) {
@@ -197,8 +232,8 @@ function draw() {
             ratio = 1 / ratio;
         }
         // selecting a random area factor
-        area = [.65, .75, .85, 1.15, 1.25, 1.35];
-        var pickarea = area[Math.floor(Math.random() * 5)];
+        var area = [.65, .75, .85, 1.15, 1.25, 1.35];
+        pickarea = area[Math.floor(Math.random() * 5)];
         //set width and height formulas
         var w = ratio * Math.sqrt((pickarea * 22500) / ratio);
         var h = Math.sqrt((pickarea * 22500) / ratio);

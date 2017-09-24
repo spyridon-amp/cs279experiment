@@ -4,43 +4,58 @@
     <meta charset="UTF-8">
     <title>experiment</title>
     <script type="text/javascript" src="jquery-1.8.2.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato|PT+Serif|Source+Serif+Pro" rel="stylesheet">
     <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body onload=CheckName()>
 <script type="text/javascript" src="main.js"></script>
 <div id="content">
+    <h1>Shape Comparisons</h1>
     <div id="instructions">
-        <h1>Shape Comparisons</h1>
-        <br/>
-        <p>Hello 😀</p>
+        <br>
+<!--        <p>Hello 😀</p>
 
-        <p>Welcome to Shape Comparisons. Thank you for joining us today.</p>
+        <p>Welcome to Shape Comparisons. Thank you for joining us today.</p>-->
 
-        <p>For this activity you will be asked to compare the size of two black boxes - a static one at the top of the screen and a changing one at the bottom of the screen. Here's how this works:</p>
+        <p>The following experiment is conducted as part of the class
+            CS 279 - Research Topics in Human Computer Interaction, at Harvard University.</p>
+
+        <p>In this activity you will be presented with two black boxes:</p>
         <ul>
-            <li>Click the small black circle at the botton of the screen to start</li>
-            <li>If the box at the bottom of the screen is larger than the one at the top, then click the "larger" button, and if it is smaller, click the "smaller" button</li>
-            <li>To get your next box, click the small black circle that appears at the bottom of the screen</li>
-            <li>Keep going with your comparisons until the activity concludes</li>
+            <li>a static one at the top of the screen and</li>
+            <li>a changing one at the bottom of the screen.</li>
         </ul>
-          <b>Please do this as quickly and accurately as possible. </b>  </p> 
+        <b>Your task is to judge how the area of the box at the bottom compares to the area
+        of the box at the top.</b>
+        <br> <br>
+        Here's how this works:
+        <ul>
+            <li>click the small black circle at the botton of the screen to start</li>
+            <li>if the box at the bottom of the screen is larger than the one at the top, then click
+                the "larger" button; <br>if it is smaller, click the "smaller" button</li>
+            <li>to get your next box, click the small black circle that appears at the bottom of the screen</li>
+            <li>keep going with your comparisons until the activity concludes.</li>
+        </ul>
+          <b>It is important to do this as quickly and accurately as possible. </b>
 
-        <p>We will start you off with a practice round where you can try this out. The entire activity will take about 15 minutes.</p>
-        <br/>
+        <p>We will start you off with a practice round where you can try this out. The entire activity will take
+            about 10 minutes.</p>
+        <br>
     </div>
     <div id="intro">
-        <br/>
+        <br>
         <p>Please enter your initials and hit "start practice round" to begin!</p>
-        <br/>
-        <span id="nameError">initials must be two (2) characters</span>
         <input type="text" id="userName" placeholder="Initials">
-        <br/>
-        <br/>
+        <br>
+        <span id="nameError">initials must be exactly two (2) characters</span>
+        <div id="noError">
+            <br>
+        </div>
         <button id="uNButton" class="buttons" disabled onclick=Login()>start practice round</button>
-        <br/>
-        <br/>
-        <br/>
+        <br>
+        <br>
     </div>
+    <br>
 </div>
 </body>
 </html>

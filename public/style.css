@@ -1,10 +1,21 @@
 html, body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 18px;
-    background-color: #F0FFF0;
-    padding: 0px;
+    font-size: 16px;
+    /*background-color: #F0FFF0;*/
+    background-color: #FFFFFF;
     margin: 0px;
     height: 100%;
+}
+
+h1 {
+    font-family:"minion-pro",times,serif;
+    font-size: 48px;
+}
+
+h2 {
+    font-family:"minion-pro",times,serif;
+    font-size: 48px;
+    color: #888888;
 }
 
 ul {
@@ -12,59 +23,73 @@ ul {
 }
 
 .buttons {
-  color: black;
-  font-size: 20px;
-  font-family: helvetica;
-  text-decoration: none;
-  border: 2px solid black;
-  border-radius: 20px;
-  transition-duration: .2s;
-  -webkit-transition-duration: .2s;
-  -moz-transition-duration: .2s;
-  background-color: white;
-  padding: 4px 30px;
+    color: black;
+    font-size: 12px;
+    /*font-family: Helvetica, Arial, sans-serif;*/
+    font-family: 'Lato', sans-serif;
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: 20px;
+    transition-duration: .2s;
+    -webkit-transition-duration: .2s;
+    -moz-transition-duration: .2s;
+    background-color: white;
+    padding: 4px 30px;
 }
 
 .buttons:hover {
-  color: white;
-  background-color: black;
-  transition-duration: .2s;
-  -webkit-transition-duration: .2s;
-  -moz-transition-duration: .2s;
+    color: white;
+    background-color: black;
+    transition-duration: .2s;
+    -webkit-transition-duration: .2s;
+    -moz-transition-duration: .2s;
 }
 
-#content{
+#content {
     height: 100%;
+    text-align: center;
 }
 
 #instructions {
-    width: 60%;
+    width: 50%;
     margin: 0 auto;
-    text-align: center;
+    text-align: justify;
     top: 0%;
 }
 
 #intro {
-    position: absolute;
+    margin: 0 auto;
+    border: solid;
+    border-width: 1px;
+    border-color: #999999;
+    font-size: 14px;
+    position: relative;
     text-align: center;
-    top: 55%;
-    width: 100%;
-    background-color: #A0F0F0;
+    width: 50%;
+    /*background-color: #A0F0F0;*/
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
 }
 
 #topBar {
-    position: absolute;
     text-align: center;
     top: 0px;
     width: 100%;
     background-color: #A0F0F0;
-    display: block; /********* display for debugging only *********/
+    display: none; /********* display for debugging only *********/
 }
 
 #central {
+    margin: 0 auto;
+    text-align: center;
     position: relative;
-    background-color: #EEEEEE; /*#ffefd5;*/
-    width: 100%;
+    background-color: #ffffff; /*#ffefd5;*/
+    width: 1024px;
     height: 100%;
 }
 
@@ -89,14 +114,22 @@ ul {
 
 #userName {
     text-align: center;
-    font-size: 20px;
+    font-size: 14px;
 }
 
 #nameError {
-    font-size: 10px;
+    font-size: 14px;
     text-align: center;
     color: #FF0000;
     display: none;
+    padding-top: 4px;
+    padding-bottom: 6px;
+}
+
+#noError {
+    font-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 6px;
 }
 
 #leftImage {
@@ -105,7 +138,7 @@ ul {
     width: 90px;
     border-radius: 50%;
     border: 2px solid darkgrey;
-    background-color: transparent;/*#e4ffcc;*/
+    background-color: transparent; /*#e4ffcc;*/
     font-size: 12px;
     text-align: center;
     vertical-align: middle;
@@ -118,7 +151,7 @@ ul {
     width: 90px;
     border-radius: 50%;
     border: 2px solid darkgrey;
-    background-color: transparent;/*#e4ffcc;*/
+    background-color: transparent; /*#e4ffcc;*/
     font-size: 12px;
     text-align: center;
     vertical-align: middle;
