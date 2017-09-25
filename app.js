@@ -24,12 +24,12 @@ var url = 'mongodb://localhost:27017/cs279';
 MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
     console.log("Connected correctly to server");
-    db.createCollection('userCollectionDev', {safe:false}, function (err, collection) {
-        console.log("userCollectionDev collection error:"+err);
+    db.createCollection('userCollectionPhase1', {safe:false}, function (err, collection) {
+        console.log("userCollection collection error:"+err);
         userCollection=collection;
     });
-    db.createCollection('dataCollectionDev', {safe:false}, function (err, collection) {
-        console.log("dataCollectionDev collection error:"+err);
+    db.createCollection('dataCollectionPhase1', {safe:false}, function (err, collection) {
+        console.log("dataCollection collection error:"+err);
         dataCollection=collection;
     });
 });

@@ -5,7 +5,7 @@ var coordsTrack = [];
 var practiceRun = true;
 var practiceIt = 0;
 var currentRound = 0;
-var totalRounds = 5;
+var totalRounds = 50;
 var score = 0;
 var pickarea;
 var ratio;
