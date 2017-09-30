@@ -13,28 +13,13 @@ MongoClient.connect(url, function(err, db) {
     dataCollection0 = db.collection('dataCollectionDev'); //I recorded the first participant in the wrong collection
     userCollection = db.collection('userCollectionPhase1'); //just user names and ids
     dataCollection = db.collection('dataCollectionPhase1'); //the rest of the participants are here
-    main();
 });
 
-/*userids = [];
-userCollection.find({user: {$exists: true}}).toArray(function(err, docs) {
-    docs.forEach(function(d) {
-        userids.push(d.userName);
-    })
-});*/
-
-function main() {
+function getData(obj, callback) {
     var formattedData = [];
     dataCollection0.find({username: 'kp'}).toArray(function(err, docs) {
         assert.equal(err, null);
         docs.forEach(function (d) {
-            //check if answer is correct
-            /*if ((d.selection === "leftImage" && d.area < 1) ||
-                (d.selection === "rightImage" && d.area > 1)) {
-                //calculate and add max deviation
-                var entry = formatDatumSplit2columns(d);
-                formattedData.push(entry);
-            }*/
             formatDatumFull(d);
             formattedData.push(d);
 
@@ -42,23 +27,13 @@ function main() {
             dataCollection.find({username: {$exists: true}}).toArray(function (err, docs) {
                 assert.equal(err, null);
                 docs.forEach(function (d) {
-                    /*if ((d.selection === "leftImage" && d.area < 1) ||
-                        (d.selection === "rightImage" && d.area > 1)) {
-                        //calculate and add max deviation
-                        var entry = formatDatumSplit2columns(d);
-                        formattedData.push(entry);
-                    }*/
                     formatDatumFull(d);
                     formattedData.push(d);
                 });
-                //export
-                var json = JSON.stringify(formattedData);
-                fs.writeFileSync("./formattedDataFull.json", json, 'utf8');
-                console.log("data written correctly");
-                process.exit(0);
+                //return
+                obj = formattedData;
+                callback();
             });
-            //.....................
-
         });
     });
 }
@@ -68,47 +43,6 @@ function formatDatumFull(d) {
     d.mcoordinates = d.coordinates.map(move);
     d.rcoordinates = rotateEntry(d, "mcoordinates");
     d.maxDev = maxDeviation(d.rcoordinates);
-}
-
-function formatDatumSplit(d) {
-    //calculate and add max deviation
-    d.coordinates = d.coordinates.map(move);
-    d.coordinates = rotateEntry(d);
-    var maxDev = maxDeviation(d.coordinates);
-    var entry = {};
-    entry.id = d.id;
-    entry.username = d.username;
-    var ratio = "ratio " + d.ratio.toFixed(2);
-    entry[ratio] = maxDev;
-    return entry;
-}
-
-function formatDatumSplit2columns(d) {
-    //calculate and add max deviation
-    d.coordinates = d.coordinates.map(move);
-    d.coordinates = rotateEntry(d);
-    var maxDev = maxDeviation(d.coordinates);
-    var entry = {};
-    entry.id = d.id;
-    entry.username = d.username;
-    var ratio;
-    if (d.ratio < 0.4) ratio = "tall";
-    if (d.ratio > 2) ratio = "wide";
-    entry[ratio] = maxDev;
-    return entry;
-}
-
-function formatDatumStack(d) {
-    d.coordinates = d.coordinates.map(move);
-    d.coordinates = rotateEntry(d);
-    var maxDev = maxDeviation(d.coordinates);
-    var entry = {};
-    entry.id = d.id;
-    entry.username = d.username;
-    entry.ratio = d.ratio;
-    entry.area = d.area;
-    entry.maxDeviation = maxDev;
-    return entry;
 }
 
 

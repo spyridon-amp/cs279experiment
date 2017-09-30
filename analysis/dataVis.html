@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>experiments visualisation</title>
+    <script type="text/javascript" src="libraries/d3/d3.js"></script>
+    <script type="text/javascript" src="libraries/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="lineChart_class.js"></script>
+    <script type="text/javascript" src="database.js"></script>
+    <style>
+        #visdiv {
+            width: 90%;
+            height: 65%;
+        }
+
+        .lineActive {
+            stroke: #ff0000;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+            stroke-width: 1px;
+        }
+    </style>
+</head>
+<body>
+<label>User:<select id="usersDropdown" onchange="updateVis()">
+    <option></option>
+</select></label>
+<br>
+<label>Points::<select id="points" onchange="updateVis()">
+    <option value="coordinates">original</option>
+    <option value="mcoordinates">moved</option>
+    <option value="rcoordinates">rotated</option>
+</select></label>
+<br>
+<label>Include incorrect
+    <input type="checkbox" id="showIncorrect" onchange="updateVis()">
+</label>
+<br>
+<label>Area: </label><span id="areaText"></span><br>
+<label>Ratio: </label><span id="ratioText"></span>
+<div id="visdiv"></div>
+<script type="text/javascript">
+    var userData;
+    var allData;
+    var lineVis;
+
+    d3.json("data/formattedDataFull.json", function (data) {
+        allData = data;
+        var uniqueIDs = Array.from(new Set(data.map(function (d) {
+            return d.id;
+        })));
+        var ii = uniqueIDs.map(function (uid) {
+            return data.map(function (d) {
+                return d.id
+            }).indexOf(uid)
+        });
+        var users = ii.map(function (i) {
+            return data[i].username
+        });
+
+        users.forEach(function (user, i) {
+            var option = document.createElement("option");
+            option.value = uniqueIDs[i];
+            option.innerHTML = user;
+            document.getElementById("usersDropdown").appendChild(option);
+        });
+
+
+    });
+
+    function selectData() {
+        var userid = document.getElementById("usersDropdown").value;
+        var showIncorrect = document.getElementById("showIncorrect").checked;
+        userData = allData.filter(function (d) {
+            return (userid === d.id) && (showIncorrect ||
+                (d.area > 1 && d.selection === "rightImage") || (d.area < 1 && d.selection === "leftImage"))
+        });
+    }
+
+    function updateVis() {
+        var pointsType = document.getElementById("points").value;
+        selectData();
+
+        if (!lineVis) {
+            lineVis = new LineVis("#visdiv", userData, pointsType);
+        }
+        else {
+            lineVis.onChange(userData, pointsType);
+        }
+
+    }
+
+</script>
+</body>
+</html>
