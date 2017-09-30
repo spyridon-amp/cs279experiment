@@ -1,6 +1,22 @@
-var fs = require('fs');
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
+
+app.use(bodyParser.json()); // for parsing application/json
+
+var server = app.listen(process.env.PORT || 8765, function() {
+    console.log('Listening on port %d', server.address().port);
+});
+
+app.post('/getData', function(req, res) {
+   res.contentType('json');
+   getData(function(d) {
+       res.send(JSON.stringify(d));
+   })
+});
+
 
 var dataCollection0;
 var userCollection;
@@ -15,7 +31,7 @@ MongoClient.connect(url, function(err, db) {
     dataCollection = db.collection('dataCollectionPhase1'); //the rest of the participants are here
 });
 
-function getData(obj, callback) {
+function getData(callback) {
     var formattedData = [];
     dataCollection0.find({username: 'kp'}).toArray(function(err, docs) {
         assert.equal(err, null);
@@ -31,8 +47,7 @@ function getData(obj, callback) {
                     formattedData.push(d);
                 });
                 //return
-                obj = formattedData;
-                callback();
+                callback(formattedData);
             });
         });
     });

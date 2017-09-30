@@ -90,13 +90,13 @@ LineVis.prototype.initVis = function(){
     this.x.domain(dataExt(this.data, this.coords, "x"));
     this.y.domain(dataExt(this.data, this.coords, "y"));
 
-    var round = this.svg.selectAll(".round")
+    var round = this.svg.append("g").attr("class", "round").selectAll(".line")
         .data(this.data)
-        .enter().append("g")
-        .attr("class", "round");
+        .enter()
+        .append("path")
+        .attr("class", "line");
 
-    round.append("path")
-        .attr("class", "line")
+    round
         .attr("d", function(d) {return that.line(d[that.coords])})
         .attr("stroke", function(d) {return that.color(d)})
         .attr("stroke-width", "1px")
@@ -122,12 +122,13 @@ LineVis.prototype.updateVis = function(){
     this.x.domain(dataExt(this.data, this.coords, "x"));
     this.y.domain(dataExt(this.data, this.coords, "y"));
 
-    var round = this.svg.selectAll(".line")   // change the line
+    var round = this.svg.select(".round").selectAll("path")   // change the line
         .data(this.data);
     round
-        .enter().append("path");
-    round
-        .attr("class", "line")
+        .enter()
+        .append("path")
+        .attr("class", "line");
+    this.svg.select(".round").selectAll("path")
         .transition().duration(750)
         .attr("d", function(d) {return that.line(d[that.coords])})
         .attr("stroke", function(d) {return that.color(d)})
@@ -138,8 +139,8 @@ LineVis.prototype.updateVis = function(){
         .exit().remove();
 
     round
-        .on("mouseover", function() {d3.select(this).classed("lineActive", true)})
-        .on("mouseout", function() {d3.select(this).classed("lineActive", false)});
+        .on("mouseover", mouseovered)
+        .on("mouseout", mouseouted);
 
     this.svg.select(".x.axis") // change the x axis
         .transition().duration(750)
@@ -175,10 +176,12 @@ function mouseovered(d) {
     d3.select(this).classed("lineActive", true);
     document.getElementById("areaText").innerHTML = d.area;
     document.getElementById("ratioText").innerHTML = d.ratio.toFixed(2);
+    document.getElementById("maxDevText").innerHTML = d.maxDev.toFixed(2);
 }
 
 function mouseouted(d) {
     d3.select(this).classed("lineActive", false);
     document.getElementById("areaText").innerHTML = "";
     document.getElementById("ratioText").innerHTML = "";
+    document.getElementById("maxDevText").innerHTML = "";
 }

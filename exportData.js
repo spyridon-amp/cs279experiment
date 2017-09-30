@@ -37,30 +37,30 @@ function main() {
             }*/
             formatDatumFull(d);
             formattedData.push(d);
-
-            //main collection query
-            dataCollection.find({username: {$exists: true}}).toArray(function (err, docs) {
-                assert.equal(err, null);
-                docs.forEach(function (d) {
-                    /*if ((d.selection === "leftImage" && d.area < 1) ||
-                        (d.selection === "rightImage" && d.area > 1)) {
-                        //calculate and add max deviation
-                        var entry = formatDatumSplit2columns(d);
-                        formattedData.push(entry);
-                    }*/
-                    formatDatumFull(d);
-                    formattedData.push(d);
-                });
-                //export
-                var json = JSON.stringify(formattedData);
-                fs.writeFileSync("./formattedDataFull.json", json, 'utf8');
-                console.log("data written correctly");
-                process.exit(0);
-            });
-            //.....................
-
         });
     });
+    //main collection query
+    dataCollection.find({username: {$exists: true}}).toArray(function (err, docs) {
+        assert.equal(err, null);
+        docs.forEach(function (d) {
+            /*if ((d.selection === "leftImage" && d.area < 1) ||
+                (d.selection === "rightImage" && d.area > 1)) {
+                //calculate and add max deviation
+                var entry = formatDatumSplit2columns(d);
+                formattedData.push(entry);
+            }*/
+            formatDatumFull(d);
+            formattedData.push(d);
+        });
+        //export
+        setTimeout(function () {
+            var json = JSON.stringify(formattedData);
+            fs.writeFileSync("./formattedDataFull.json", json, 'utf8');
+            console.log("data written successfully");
+            process.exit(0);
+        }, 1000);
+    });
+    //.....................
 }
 
 function formatDatumFull(d) {

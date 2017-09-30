@@ -6,7 +6,6 @@
     <script type="text/javascript" src="libraries/d3/d3.js"></script>
     <script type="text/javascript" src="libraries/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="lineChart_class.js"></script>
-    <script type="text/javascript" src="database.js"></script>
     <style>
         #visdiv {
             width: 90%;
@@ -15,6 +14,16 @@
 
         .lineActive {
             stroke: #ff0000;
+        }
+
+        #ratio {
+            position: absolute;
+            left: 100px;
+        }
+
+        #maxDev {
+            position: absolute;
+            left: 200px;
         }
 
         .axis path,
@@ -28,7 +37,7 @@
 </head>
 <body>
 <label>User:<select id="usersDropdown" onchange="updateVis()">
-    <option></option>
+    <option value="*" selected></option>
 </select></label>
 <br>
 <label>Points::<select id="points" onchange="updateVis()">
@@ -41,15 +50,39 @@
     <input type="checkbox" id="showIncorrect" onchange="updateVis()">
 </label>
 <br>
-<label>Area: </label><span id="areaText"></span><br>
-<label>Ratio: </label><span id="ratioText"></span>
+<label>Area: <span id="areaText"></span></label>
+<label id="ratio">Ratio: <span id="ratioText"></span></label>
+<label id="maxDev">Maximum Deviation: <span id="maxDevText"></span></label>
 <div id="visdiv"></div>
 <script type="text/javascript">
     var userData;
     var allData;
     var lineVis;
 
-    d3.json("data/formattedDataFull.json", function (data) {
+//    d3.json("data/formattedDataFull.json", function (data) {
+    $.ajax({
+            url: "/getData",
+            type: "POST",
+            dataType: "json",
+            data: JSON.stringify({request: "data"}),
+            contentType: "application/json",
+            cache: false,
+            timeout: 15000,
+            complete: function () {
+                //called when complete
+                console.log('process complete');
+            },
+            success: function (data) {
+                console.log('process success');
+                processData(data);
+            },
+            error: function () {
+                console.log('process error');
+            }
+        }
+    );
+
+    function processData(data) {
         allData = data;
         var uniqueIDs = Array.from(new Set(data.map(function (d) {
             return d.id;
@@ -70,16 +103,23 @@
             document.getElementById("usersDropdown").appendChild(option);
         });
 
-
-    });
+        updateVis();
+    }
+//    });
 
     function selectData() {
         var userid = document.getElementById("usersDropdown").value;
         var showIncorrect = document.getElementById("showIncorrect").checked;
         userData = allData.filter(function (d) {
-            return (userid === d.id) && (showIncorrect ||
-                (d.area > 1 && d.selection === "rightImage") || (d.area < 1 && d.selection === "leftImage"))
+            return (userid === d.id || userid === "*") &&
+                ((d.area > 1 && d.selection === "rightImage") || (d.area < 1 && d.selection === "leftImage"))
         });
+        if (showIncorrect) {
+            userData = userData.concat(allData.filter(function(d) {
+                return (userid === d.id || userid === "*") &&
+                    ((d.area < 1 && d.selection === "rightImage") || (d.area > 1 && d.selection === "leftImage"))
+            }));
+        }
     }
 
     function updateVis() {
