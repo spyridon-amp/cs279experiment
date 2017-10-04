@@ -49,6 +49,19 @@
 <label>Include incorrect
     <input type="checkbox" id="showIncorrect" onchange="updateVis()">
 </label>
+<form id="condition" onchange="updateVis()">Condition:
+    <input type="radio" name="condition" value="congruent">congruent
+    <input type="radio" name="condition" value="incongruent">incongruent
+    <input type="radio" name="condition" value="all" checked>all
+</form>
+<form id="size" onchange="updateVis()">Size:
+    <input type="checkbox" name="size" value="0.65" checked>65%
+    <input type="checkbox" name="size" value="0.75" checked>75%
+    <input type="checkbox" name="size" value="0.85" checked>85%
+    <input type="checkbox" name="size" value="1.15" checked>115%
+    <input type="checkbox" name="size" value="1.25" checked>125%
+    <input type="checkbox" name="size" value="1.35" checked>135%
+</form>
 <br>
 <label>Area: <span id="areaText"></span></label>
 <label id="ratio">Ratio: <span id="ratioText"></span></label>
@@ -110,6 +123,10 @@
     function selectData() {
         var userid = document.getElementById("usersDropdown").value;
         var showIncorrect = document.getElementById("showIncorrect").checked;
+        var condition = $("input[name=condition]:checked").val();
+        var areas = $("input[name=size]:checked").map(function () {
+            return parseFloat(this.value);
+        }).get();
         userData = allData.filter(function (d) {
             return (userid === d.id || userid === "*") &&
                 ((d.area > 1 && d.selection === "rightImage") || (d.area < 1 && d.selection === "leftImage"))
@@ -120,6 +137,19 @@
                     ((d.area < 1 && d.selection === "rightImage") || (d.area > 1 && d.selection === "leftImage"))
             }));
         }
+        if (condition === "congruent") {
+            userData = userData.filter(function(d) {
+                return (d.ratio === 1);
+            })
+        }
+        else if (condition === "incongruent") {
+            userData = userData.filter(function(d) {
+                return (d.ratio > 4 || 1/d.ratio > 4);
+            })
+        }
+        userData = userData.filter(function(d) {
+            return areas.indexOf(d.area) >= 0;
+        })
     }
 
     function updateVis() {

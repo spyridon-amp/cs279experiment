@@ -54,8 +54,8 @@ LineVis.prototype.initVis = function(){
             return colors[1];
     };
 
-    this.x.domain(dataExt(this.data, this.coords, "x"));
-    this.y.domain(dataExt(this.data, this.coords, "y"));
+    this.x.domain(dataExt(allData, this.coords, "x"));
+    this.y.domain(dataExt(allData, this.coords, "y"));
 
     this.xAxis = d3.axisBottom(this.x);
     this.yAxis = d3.axisLeft(this.y);
@@ -119,8 +119,8 @@ LineVis.prototype.updateVis = function(){
         .x(function(d) { return that.x(d.x); })
         .y(function(d) { return that.y(d.y); });
 
-    this.x.domain(dataExt(this.data, this.coords, "x"));
-    this.y.domain(dataExt(this.data, this.coords, "y"));
+    this.x.domain(dataExt(allData, this.coords, "x"));
+    this.y.domain(dataExt(allData, this.coords, "y"));
 
     var round = this.svg.select(".round").selectAll("path")   // change the line
         .data(this.data);
@@ -138,7 +138,7 @@ LineVis.prototype.updateVis = function(){
     round
         .exit().remove();
 
-    round
+    this.svg.select(".round").selectAll("path")
         .on("mouseover", mouseovered)
         .on("mouseout", mouseouted);
 
@@ -152,7 +152,7 @@ LineVis.prototype.updateVis = function(){
 };
 
 
-LineVis.prototype.onChange = function (filtered_data, coordsType){
+LineVis.prototype.onChange = function (filtered_data, coordsType, extents){
     this.data = filtered_data;
     this.coords = coordsType;
     this.updateVis();

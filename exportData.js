@@ -29,33 +29,33 @@ function main() {
         assert.equal(err, null);
         docs.forEach(function (d) {
             //check if answer is correct
-            /*if ((d.selection === "leftImage" && d.area < 1) ||
+            if ((d.selection === "leftImage" && d.area < 1) ||
                 (d.selection === "rightImage" && d.area > 1)) {
                 //calculate and add max deviation
-                var entry = formatDatumSplit2columns(d);
+                var entry = formatDatumStack(d);
                 formattedData.push(entry);
-            }*/
-            formatDatumFull(d);
-            formattedData.push(d);
+            }
+            //formatDatumFull(d);
+
         });
     });
     //main collection query
     dataCollection.find({username: {$exists: true}}).toArray(function (err, docs) {
         assert.equal(err, null);
         docs.forEach(function (d) {
-            /*if ((d.selection === "leftImage" && d.area < 1) ||
+            if ((d.selection === "leftImage" && d.area < 1) ||
                 (d.selection === "rightImage" && d.area > 1)) {
                 //calculate and add max deviation
-                var entry = formatDatumSplit2columns(d);
+                var entry = formatDatumStack(d);
                 formattedData.push(entry);
-            }*/
-            formatDatumFull(d);
-            formattedData.push(d);
+            }
+            //formatDatumFull(d);
+
         });
         //export
         setTimeout(function () {
             var json = JSON.stringify(formattedData);
-            fs.writeFileSync("./formattedDataFull.json", json, 'utf8');
+            fs.writeFileSync("./formattedDataStackUpdated-withoutMistakes.json", json, 'utf8');
             console.log("data written successfully");
             process.exit(0);
         }, 1000);

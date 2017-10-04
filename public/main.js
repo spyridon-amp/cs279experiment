@@ -233,7 +233,7 @@ function draw() {
         }
         // selecting a random area factor
         var area = [.65, .75, .85, 1.15, 1.25, 1.35];
-        pickarea = area[Math.floor(Math.random() * 5)];
+        pickarea = area[Math.floor(Math.random() * 6)];
         //set width and height formulas
         var w = ratio * Math.sqrt((pickarea * 22500) / ratio);
         var h = Math.sqrt((pickarea * 22500) / ratio);
